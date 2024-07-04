@@ -6,8 +6,12 @@ import (
 	"strings"
 )
 
-func Reflect(value reflect.Value) Map {
-	return flatten(value)
+func Reflect(value any) Map {
+	v := reflect.ValueOf(value)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	return flatten(v)
 }
 
 func flatten(v reflect.Value, keys ...string) Map {
@@ -20,7 +24,8 @@ func flatten(v reflect.Value, keys ...string) Map {
 				Value: v.Index(i),
 			}
 
-			tokens = Merge(tokens,
+			tokens = Merge(
+				tokens,
 				flatten(
 					v.Index(i),
 					strings.Join(append(keys, fmt.Sprint(i)), "."),
@@ -33,14 +38,14 @@ func flatten(v reflect.Value, keys ...string) Map {
 				Value: v.MapIndex(k),
 			}
 
-			tokens = Merge(tokens,
+			tokens = Merge(
+				tokens,
 				flatten(
 					v.MapIndex(k),
 					strings.Join(append(keys, fmt.Sprint(k)), "."),
 				),
 			)
 		}
-
 	case reflect.Struct:
 		fields := reflect.VisibleFields(t)
 		for i, field := range fields {

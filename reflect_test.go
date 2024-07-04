@@ -98,7 +98,7 @@ func TestReflect(t *testing.T) {
 		"Func":               {Value: reflect.ValueOf(s.Func)},
 	}
 
-	tokens := flat.Reflect(reflect.ValueOf(s))
+	tokens := flat.Reflect(s)
 
 	if len(expected) != len(tokens) {
 		t.Errorf("expected length of %d; go %d", len(expected), len(tokens))
@@ -116,7 +116,7 @@ func TestReflect(t *testing.T) {
 }
 
 func BenchmarkReflect(b *testing.B) {
-	s := reflect.ValueOf(struct {
+	s := struct {
 		Value  string
 		Map    map[int]string
 		Slice  []string
@@ -133,7 +133,7 @@ func BenchmarkReflect(b *testing.B) {
 			},
 			Slice: []string{"hello", "world"},
 		},
-	})
+	}
 
 	for i := 0; i < b.N; i++ {
 		_ = flat.Reflect(s)
