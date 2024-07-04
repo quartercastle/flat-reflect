@@ -25,7 +25,7 @@ var cfg struct {
 // Using flat.Reflect to flatten the structure of cfg and loop over it to
 // set its values based on the defined StructTag. It will set the value to either the
 // environment variable or set it to the default value in this example.
-for key, field := range flat.Reflect(&cfg) {
+for _, field := range flat.Reflect(&cfg) {
   if v, ok := os.LookupEnv(field.Tag.Get("env")); ok {
     field.SetString(v)
   } else {
