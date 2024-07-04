@@ -16,7 +16,7 @@ Below is an example of how flat reflection can be used to initialize a struct
 based on its StructTags. This is partically useful for configuration
 initializations.
 ```go
-// Initialising the cfg struct nil
+// Initialising the cfg struct to nil
 var cfg struct {
   Host string `env:"HOST" default:"localhost"`
   Port uint   `env:"PORT" default:"8080"`
@@ -34,6 +34,6 @@ for _, field := range flat.Reflect(&cfg) {
 }
 
 fmt.Println(cfg)
-// Output: {localhsot, 8080}
+// Output: {localhost, 8080}
 ```
 
