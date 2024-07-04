@@ -1,4 +1,4 @@
-package flatReflect
+package flat
 
 type Map map[string]*Token
 

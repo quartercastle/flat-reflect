@@ -1,4 +1,4 @@
-package flatReflect
+package flat
 
 import (
 	"fmt"
@@ -6,7 +6,15 @@ import (
 	"strings"
 )
 
-func Tokenize(v reflect.Value, keys ...string) Map {
+func Reflect(value any) Map {
+	v := reflect.ValueOf(value)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	return flatten(v)
+}
+
+func flatten(v reflect.Value, keys ...string) Map {
 	tokens := Map{}
 	t := v.Type()
 	switch t.Kind() {
@@ -16,8 +24,9 @@ func Tokenize(v reflect.Value, keys ...string) Map {
 				Value: v.Index(i),
 			}
 
-			tokens = Merge(tokens,
-				Tokenize(
+			tokens = Merge(
+				tokens,
+				flatten(
 					v.Index(i),
 					strings.Join(append(keys, fmt.Sprint(i)), "."),
 				),
@@ -29,14 +38,14 @@ func Tokenize(v reflect.Value, keys ...string) Map {
 				Value: v.MapIndex(k),
 			}
 
-			tokens = Merge(tokens,
-				Tokenize(
+			tokens = Merge(
+				tokens,
+				flatten(
 					v.MapIndex(k),
 					strings.Join(append(keys, fmt.Sprint(k)), "."),
 				),
 			)
 		}
-
 	case reflect.Struct:
 		fields := reflect.VisibleFields(t)
 		for i, field := range fields {
@@ -51,7 +60,7 @@ func Tokenize(v reflect.Value, keys ...string) Map {
 
 			tokens = Merge(
 				tokens,
-				Tokenize(
+				flatten(
 					v.Field(i),
 					strings.Join(append(keys, field.Name), "."),
 				),
