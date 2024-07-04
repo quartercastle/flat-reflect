@@ -7,7 +7,7 @@ This is useful in cases where the type is initialized from multiple sources,
 it could be a configuration file, the environment and default values.
 
 ### Install
-```go
+```sh
 go get github.com/quartercastle/flat-reflect
 ```
 
@@ -16,7 +16,6 @@ Below is an example of how flat reflection can be used to initialize a struct
 based on its StructTags. This is partically useful for configuration
 initializations.
 ```go
-
 // Initialising the cfg struct nil
 var cfg struct {
   Host string `env:"HOST" default:"localhost"`
