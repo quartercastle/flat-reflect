@@ -10,7 +10,7 @@ import (
 func Example() {
 	cfg := struct {
 		Host string `default:"localhost"`
-		Port string `default:"8080"`
+		Port int    `default:"8080"`
 	}{}
 
 	for _, field := range flat.Reflect(&cfg) {
@@ -25,7 +25,7 @@ func Example() {
 func ExampleWithEnv() {
 	cfg := struct {
 		Host string `env:"EXAMPLE_HOST" default:"localhost"`
-		Port string `env:"EXAMPLE_PORT" default:"8080"`
+		Port int    `env:"EXAMPLE_PORT" default:"8080"`
 	}{}
 
 	os.Setenv("EXAMPLE_HOST", "example.com")
