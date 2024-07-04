@@ -1,4 +1,4 @@
-package flatReflect
+package flat
 
 import (
 	"errors"
@@ -40,7 +40,7 @@ func build(ident string, t reflect.Type) string {
 	return ident + t.Name()
 }
 
-func (token Token) Set(value any) error {
+func (token *Token) Set(value any) error {
 	t := token.Value.Type()
 	v := reflect.ValueOf(value)
 
@@ -52,7 +52,7 @@ func (token Token) Set(value any) error {
 	return nil
 }
 
-func (token Token) SetString(value string) error {
+func (token *Token) SetString(value string) error {
 	t := token.Value.Type()
 	switch t.Kind() {
 	case reflect.String:

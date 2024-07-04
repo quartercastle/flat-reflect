@@ -1,11 +1,11 @@
-package flatReflect_test
+package flat_test
 
 import (
 	"fmt"
 	"reflect"
 	"testing"
 
-	flatReflect "github.com/quartercastle/flat-reflect"
+	flat "github.com/quartercastle/flat-reflect"
 )
 
 type nested struct {
@@ -14,7 +14,7 @@ type nested struct {
 	Slice []string
 }
 
-func TestTokenize(t *testing.T) {
+func TestReflect(t *testing.T) {
 	s := struct {
 		Value      string
 		NilMap     map[int]int
@@ -60,7 +60,7 @@ func TestTokenize(t *testing.T) {
 		Func: func() {},
 	}
 
-	expected := map[string]*flatReflect.Token{
+	expected := map[string]*flat.Token{
 		"Value":              {Value: reflect.ValueOf(s.Value)},
 		"NilMap":             {Value: reflect.ValueOf(s.NilMap)},
 		"Map":                {Value: reflect.ValueOf(s.Map)},
@@ -98,7 +98,7 @@ func TestTokenize(t *testing.T) {
 		"Func":               {Value: reflect.ValueOf(s.Func)},
 	}
 
-	tokens := flatReflect.Tokenize(reflect.ValueOf(s))
+	tokens := flat.Reflect(reflect.ValueOf(s))
 
 	if len(expected) != len(tokens) {
 		t.Errorf("expected length of %d; go %d", len(expected), len(tokens))
@@ -115,7 +115,7 @@ func TestTokenize(t *testing.T) {
 	}
 }
 
-func BenchmarkTokenize(b *testing.B) {
+func BenchmarkReflect(b *testing.B) {
 	s := reflect.ValueOf(struct {
 		Value  string
 		Map    map[int]string
@@ -136,6 +136,6 @@ func BenchmarkTokenize(b *testing.B) {
 	})
 
 	for i := 0; i < b.N; i++ {
-		_ = flatReflect.Tokenize(s)
+		_ = flat.Reflect(s)
 	}
 }
