@@ -1,8 +1,10 @@
 # flat-reflect
 
-Flat reflect takes a slice, array, map or struct and turns into a flattened map
-where the key is the nested path and the value is of `reflect.Value` which can
-be used to manipulate the value of the initial provided structure.
+Flat reflect takes a slice, array, map or struct and turns it into a flattened map
+where the key is the nested path and the value is of type `flat.Token`.
+The flattened map can be used to manipulate the values of the initial provided type.
+This is useful in cases where the type is initialized from multiple sources,
+it could be a configuration file, the environment and default values.
 
 ### Install
 ```go
@@ -23,7 +25,7 @@ var cfg struct {
 
 // Using flat.Reflect to flatten the structure of cfg and loop over it to
 // set its values based on the defined StructTag. It will set the value to either the
-// environment variable or set it to the default value
+// environment variable or set it to the default value in this example.
 for key, field := range flat.Reflect(&cfg) {
   if v, ok := os.LookupEnv(field.Tag.Get("env")); ok {
     field.SetString(v)
